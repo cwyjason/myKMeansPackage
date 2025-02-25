@@ -1,0 +1,50 @@
+## R Packages and Shiny (Part 2-3)
+
+### Part 2: Creating the K-means R Package
+
+For this assignment, I created a comprehensive R package for K-means clustering called `myKMeansPackage`. The package includes two main functions:
+
+1. `kmeans_cluster()` - Performs K-means clustering on a dataset with proper input validation
+2. `kmeans_plot()` - Visualizes the clustering results with customizable options
+
+Both functions are thoroughly documented with roxygen comments and include detailed examples. The package also includes comprehensive unit tests to ensure functionality and correct error handling.
+
+Here's an example of using the functions:
+
+```r
+library(myKMeansPackage)
+
+# Generate sample data
+set.seed(123)
+data <- matrix(rnorm(100), ncol = 2)
+
+# Perform clustering
+result <- kmeans_cluster(data, centers = 3)
+
+# Plot the results
+kmeans_plot(data, result)
+```
+
+The Shiny app is included in the package's `inst/shiny_app` directory and can be launched with:
+
+```r
+shiny::runApp(system.file("shiny_app", package = "myKMeansPackage"))
+```
+
+The Shiny app provides a user-friendly interface for exploring K-means clustering with:
+
+- Multiple data generation options (normal clusters, uniform random, circular pattern, or the iris dataset)
+- Controls for the number of clusters and other K-means parameters
+- Interactive visualization of clustering results
+- Display of clustering statistics
+
+### Part 3: GitHub Repository
+
+My K-means package is available on GitHub at: [https://github.com/cwyjason/myKMeansPackage](https://github.com/cwyjason/myKMeansPackage)
+
+The repository includes:
+- Full source code for the package
+- Documentation generated with roxygen2
+- Unit tests created with testthat
+- A comprehensive README file
+- The Shiny app in the inst/shiny_app directory
