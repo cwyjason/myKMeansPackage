@@ -93,8 +93,6 @@ function(input, output, session) {
       x_col = x_col,
       y_col = y_col,
       main = paste0("K-means Clustering (k=", input$k_clusters, ")"),
-      xlab = colnames(data)[1],
-      ylab = colnames(data)[2],
       point_size = 1.8,
       center_size = 4
     )

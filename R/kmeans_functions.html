@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Woo Young Choi" />
 
+<meta name="date" content="2025-02-26" />
 
-<title>kmeans_functions.knit</title>
+<title>Homework 4</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -207,6 +209,83 @@ window.buildTabsets = function(tocID) {
 };
 
 </script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia, pre.foldable');
+  rCodeBlocks.each(function() {
+    // skip if the block has fold-none class
+    if ($(this).hasClass('fold-none')) return;
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    var showThis = (show || $(this).hasClass('fold-show')) && !$(this).hasClass('fold-hide');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (showThis ? 'Hide' : 'Show') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm code-folding-btn pull-right float-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-bs-toggle', 'collapse') // BS5
+        .attr('data-target', '#' + id)
+        .attr('data-bs-target', '#' + id)   // BS5
+        .attr('aria-expanded', showThis)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // show the div if necessary
+    if (showThis) div.collapse('show');
+
+    // update state of button on show/hide
+    //   * Change text
+    //   * add a class for intermediate states styling
+    div.on('hide.bs.collapse', function () {
+      showCodeText.text('Show');
+      showCodeButton.addClass('btn-collapsing');
+    });
+    div.on('hidden.bs.collapse', function () {
+      showCodeButton.removeClass('btn-collapsing');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+      showCodeButton.addClass('btn-expanding');
+    });
+    div.on('shown.bs.collapse', function () {
+      showCodeButton.removeClass('btn-expanding');
+    });
+
+  });
+
+}
+</script>
 <style type="text/css">.hljs-literal {
 color: #990073;
 }
@@ -330,6 +409,9 @@ display: none;
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -346,45 +428,142 @@ display: none;
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
+
+<h1 class="title toc-ignore">Homework 4</h1>
+<h4 class="author">Woo Young Choi</h4>
+<h4 class="date">February 26, 2025</h4>
 
 </div>
 
 
-<div id="r-packages-and-shiny-part-2-3" class="section level2">
-<h2>R Packages and Shiny (Part 2-3)</h2>
+<div id="part-1" class="section level3">
+<h3>Part 1:</h3>
+<div id="the-template-set-up" class="section level4">
+<h4>The template set up:</h4>
+<ul>
+<li>fluidPage() - Creates the user interface</li>
+<li>sidebarLayout() - Organizes the UI into a sidebar and main
+panel</li>
+<li>sidebarPanel() - Where inputs will go</li>
+<li>mainPanel() - Where outputs will be displayed</li>
+<li>server function - Handles the app’s logic</li>
+<li>shinyApp() - Combines the UI and server to create the
+application</li>
+</ul>
+</div>
+<div id="title-panel" class="section level4">
+<h4>Title Panel:</h4>
+<ul>
+<li>Added a title to the app using titlePanel(“k-means clustering”).
+This creates a header at the top of the page, giving users context about
+what the app does.</li>
+</ul>
+</div>
+<div id="ui-inputs" class="section level4">
+<h4>UI Inputs</h4>
+<ul>
+<li>input controls are added to the sidebarPanel():</li>
+</ul>
+</div>
+<div id="ui-outputs" class="section level4">
+<h4>UI Outputs</h4>
+<ul>
+<li>Added plotOutput(‘plot1’) to the mainPanel(). This creates a
+placeholder for where the plot will be displayed.</li>
+</ul>
+</div>
+<div id="output-plot" class="section level4">
+<h4>Output Plot</h4>
+<ul>
+<li>A simple plot is created in the server function using:</li>
+</ul>
+<pre class="r"><code>output$plot1 &lt;- renderPlot({
+  plot(iris[,c(&quot;Sepal.Length&quot;,&quot;Sepal.Width&quot;)])
+})</code></pre>
+</div>
+<div id="reactive-axes" class="section level4">
+<h4>Reactive Axes</h4>
+<ul>
+<li>Modified the plot to use the columns for the x and y axes</li>
+</ul>
+<pre class="r"><code>output$plot1 &lt;- renderPlot({
+  plot(iris[,c(input$xcol,input$ycol)])
+})</code></pre>
+</div>
+<div id="k-means" class="section level4">
+<h4>K-means</h4>
+<ul>
+<li>Added K-means clustering to the plot</li>
+</ul>
+<pre class="r"><code>output$plot1 &lt;- renderPlot({
+  plot(iris[,c(input$xcol,input$ycol)],
+       col = kmeans(iris[,c(input$xcol,input$ycol)], input$clusters)$cluster)
+})</code></pre>
+</div>
+<div id="cluster-centers" class="section level4">
+<h4>Cluster Centers</h4>
+<ul>
+<li>Enhanced the plot to show the cluster centers</li>
+</ul>
+<pre class="r"><code>output$plot1 &lt;- renderPlot({
+  plot(iris[,c(input$xcol,input$ycol)],
+       col = kmeans(iris[,c(input$xcol,input$ycol)], input$clusters)$cluster)
+  points(kmeans(iris[,c(input$xcol,input$ycol)], input$clusters)$centers, pch = 4, cex = 4, lwd = 4)
+})</code></pre>
+</div>
+<div id="save-k-means" class="section level4">
+<h4>Save K-means</h4>
+<ul>
+<li>Improved the code by using a reactive expression</li>
+</ul>
+<pre class="r"><code>clusters &lt;- reactive({
+  kmeans(iris[,c(input$xcol,input$ycol)], input$clusters)
+})
+
+output$plot1 &lt;- renderPlot({
+  plot(iris[,c(input$xcol,input$ycol)],
+       col = clusters()$cluster)
+  points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+})</code></pre>
+</div>
+</div>
 <div id="part-2-creating-the-k-means-r-package" class="section level3">
 <h3>Part 2: Creating the K-means R Package</h3>
-<p>For this assignment, I created a comprehensive R package for K-means
-clustering called <code>myKMeansPackage</code>. The package includes two
-main functions:</p>
+<p>For this assignment, I made a comprehensive R package for K-means
+clustering called <code>myKMeansPackage</code>. The package has two main
+functions:</p>
 <ol style="list-style-type: decimal">
 <li><code>kmeans_cluster()</code> - Performs K-means clustering on a
 dataset with proper input validation</li>
 <li><code>kmeans_plot()</code> - Visualizes the clustering results with
 customizable options</li>
 </ol>
-<p>Both functions are thoroughly documented with roxygen comments and
-include detailed examples. The package also includes comprehensive unit
-tests to ensure functionality and correct error handling.</p>
-<p>Here’s an example of using the functions:</p>
+<p>Both functions are shown with roxygen comments with examples. The
+package also includes comprehensive unit tests to correct error</p>
 <pre class="r"><code>library(myKMeansPackage)
 
-# Generate sample data
-set.seed(123)
-data &lt;- matrix(rnorm(100), ncol = 2)
+# Load example data
+data(iris)
+iris_data &lt;- iris[, 1:4]
 
 # Perform clustering
-result &lt;- kmeans_cluster(data, centers = 3)
+result &lt;- kmeans_cluster(iris_data, k = 3)
 
 # Plot the results
-kmeans_plot(data, result)</code></pre>
+kmeans_plot(iris_data, result, x_index = 1, y_index = 2)</code></pre>
 <p>The Shiny app is included in the package’s
 <code>inst/shiny_app</code> directory and can be launched with:</p>
-<pre class="r"><code>shiny::runApp(system.file(&quot;shiny_app&quot;, package = &quot;myKMeansPackage&quot;))</code></pre>
-<p>The Shiny app provides a user-friendly interface for exploring
-K-means clustering with:</p>
+<pre class="r"><code>run_kmeans_app()</code></pre>
+<p>The benefits of the Shiny App</p>
 <ul>
 <li>Multiple data generation options (normal clusters, uniform random,
 circular pattern, or the iris dataset)</li>
@@ -401,7 +580,6 @@ parameters</li>
 Documentation generated with roxygen2 - Unit tests created with testthat
 - A comprehensive README file - The Shiny app in the inst/shiny_app
 directory</p>
-</div>
 </div>
 
 
@@ -437,6 +615,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

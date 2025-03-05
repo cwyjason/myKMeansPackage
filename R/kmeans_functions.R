@@ -107,9 +107,13 @@ kmeans_plot <- function(data, kmeans_result, x_col = 1, y_col = 2,
   if (is.character(x_col) && is.character(y_col)) {
     x <- data[, x_col]
     y <- data[, y_col]
+    x_name <- x_col
+    y_name <- y_col
   } else {
     x <- data[, x_col]
     y <- data[, y_col]
+    x_name <- colnames(data)[x_col]
+    y_name <- colnames(data)[y_col]
   }
 
   # Set up color palette
@@ -124,7 +128,10 @@ kmeans_plot <- function(data, kmeans_result, x_col = 1, y_col = 2,
   # Create the plot
   plot(x, y, col = color_palette[kmeans_result$cluster],
        pch = 20, cex = point_size,
-       main = main, ...)
+       main = main,
+       xlab = x_name,
+       ylab = y_name,
+       ...)
 
   # Add cluster centers
   if (is.character(x_col) && is.character(y_col)) {

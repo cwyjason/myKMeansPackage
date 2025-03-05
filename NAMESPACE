@@ -2,3 +2,4 @@
 
 export(kmeans_cluster)
 export(kmeans_plot)
+export(run_kmeans_app)
