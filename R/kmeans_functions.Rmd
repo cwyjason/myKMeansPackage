@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-### Part 1: 
+### Part 1
 
 #### The template set up:
 * fluidPage() - Creates the user interface
